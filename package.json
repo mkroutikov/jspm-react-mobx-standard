@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "description": "ReactJS boilerplate",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkroutikov/jspm-react-mobx-standard.git"
+  },
+  "author": "Mike Kroutikov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mkroutikov/jspm-react-mobx-standard/issues"
+  },
+  "homepage": "https://github.com/mkroutikov/jspm-react-mobx-standard#readme",
+  "devDependencies": {
+    "http-server": "^0.9.0",
+    "jspm": "^0.17.0-beta.39"
+  },
+  "jspm": {
+    "devDependencies": {
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.21"
+    }
+  }
+}

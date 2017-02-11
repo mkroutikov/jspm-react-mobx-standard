@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jspm_packages/system.js"></script>
+    <script src="jspm.config.js"></script>
+  </head>
+  <body>
+    <script>
+         System.import('./src/app.js').then(function (x) {
+           console.log(x.default.blah)
+           console.log('ran at ', new Date())
+         })
+    </script>
+  </body>
+</html>
