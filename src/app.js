@@ -1,3 +1,6 @@
+function decorator () { }
+
+@decorator
 class X {
   constructor() {
     console.log('created instance of class X')

@@ -1,16 +1,26 @@
-# Setting up jspm and babel
+## Lets use the latest and greatest syntax ES features
 
-`babel` will be used to transile ES7 into ES5, `jspm` will be used to manage
-dependencies and build production bundles.
-
-1. `npm init`  (accept all the defaults)
-2. `npm install jspm --save-dev`
-3. `./node_modules/.bin/jspm init -p` (accept all defaults, but make config name `jspm.config.js` for clarity)
-
-## Lets test if building a bundle works
-
-Create file `src/app.js` and put some `class` syntax into it:
+To fix this, open `jspm.config.js` and add `"stage": 0` under `babelOptions`:
 ```
+System.config({
+  baseURL: "/",
+  defaultJSExtensions: true,
+  transpiler: "babel",
+  babelOptions: {
+    "stage": 0,
+    "optional": [
+      "runtime",
+      "optimisation.modules.system"
+    ]
+  },
+  ...
+```
+
+test0.js
+```
+function decorator() {}
+
+@decorator
 class X {
   constructor() {
     console.log('created instance of class X')
@@ -26,39 +36,17 @@ const x = new X()
 export default x
 ```
 
-Try compiling a bundle:
+Compiling this will produce an error:
 ```
-./node_modules/.bin/jspm bundle-sfx src/app.js dist/build.js
-node dist/build.js
+./node_modules/.bin/jspm bundle-sfx ./test0.js
 ```
-Should work!
+```
+     Building the single-file sfx bundle for ./test0.js...
 
-## Lets test if automatic transpiling in the browser works
-
-Create file `index.html` and put the following into it:
-```
-<!DOCTYPE html>
-<html>
-  <head>
-    <script src="jspm_packages/system.js"></script>
-    <script src="jspm.config.js"></script>
-  </head>
-  <body>
-    <script>
-         System.import('./src/app.js').then(function (x) {
-           console.log(x.default.blah)
-           console.log('ran at ', new Date())
-         })
-    </script>
-  </body>
-</html>
+err  Error on translate for test0.js at file:///home/mike/git/te2/test0.js
+        SyntaxError: file:///home/mike/git/te2/test0.js: Unexpected token (4:0)
+     function decorator() {}
+...
 ```
 
-Now, lets install `http-server` and run it
-```
-npm install http-server --save-dev
-./node_modules/.bin/http-server -c-1
-```
-
-Direct you favorite browser to `localhost:8080`, open Dev tools and check JS
-console. Should have no errors and some logging from JS code invoked.
+Need to allow babel transpile decorator syntax
