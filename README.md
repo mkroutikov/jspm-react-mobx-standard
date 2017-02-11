@@ -4,8 +4,8 @@
 dependencies and build production bundles.
 
 1. `npm init`  (accept all the defaults)
-2. `npm install jspm@beta --save-dev`  (need JSPM version 0.17.0 or better - still in beta stage)
-3. `./node_modules/.bin/jspm init` (accept all defaults)
+2. `npm install jspm --save-dev`
+3. `./node_modules/.bin/jspm init -p` (accept all defaults, but make config name `jspm.config.js` for clarity)
 
 ## Lets test if building a bundle works
 
@@ -28,7 +28,7 @@ export default x
 
 Try compiling a bundle:
 ```
-./node_modules/.bin/jspm build src/app.js dist/build.js
+./node_modules/.bin/jspm bundle-sfx src/app.js dist/build.js
 node dist/build.js
 ```
 Should work!

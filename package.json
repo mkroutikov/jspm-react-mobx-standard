@@ -15,12 +15,14 @@
   },
   "homepage": "https://github.com/mkroutikov/jspm-react-mobx-standard#readme",
   "devDependencies": {
-    "http-server": "^0.9.0",
-    "jspm": "^0.17.0-beta.39"
+    "http-server": "^0.9.0"
   },
   "jspm": {
+    "configFile": "jspm.config.js",
     "devDependencies": {
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.21"
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
     }
   }
 }
