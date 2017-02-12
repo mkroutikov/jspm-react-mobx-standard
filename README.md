@@ -1,27 +1,16 @@
-## Lets use the latest and greatest syntax ES features
+## Time to add mobx and react
 
-To fix this, open `jspm.config.js` and add `"stage": 0` under `babelOptions`:
 ```
-System.config({
-  baseURL: "/",
-  defaultJSExtensions: true,
-  transpiler: "babel",
-  babelOptions: {
-    "stage": 0,
-    "optional": [
-      "runtime",
-      "optimisation.modules.system"
-    ]
-  },
-  ...
+./node_modules/.bin/jspm install npm:mobx npm:react npm:mobx-react npm:react-dom
 ```
 
-test0.js
+Now, change `src/app.js` to use `mobx`:
 ```
-function decorator() {}
+import {observable} from 'mobx'
 
-@decorator
 class X {
+  @observable someProperty = 0
+
   constructor() {
     console.log('created instance of class X')
   }
@@ -36,17 +25,75 @@ const x = new X()
 export default x
 ```
 
-Compiling this will produce an error:
+Creating bundle with `jspm` should work:
 ```
-./node_modules/.bin/jspm bundle-sfx ./test0.js
-```
-```
-     Building the single-file sfx bundle for ./test0.js...
-
-err  Error on translate for test0.js at file:///home/mike/git/te2/test0.js
-        SyntaxError: file:///home/mike/git/te2/test0.js: Unexpected token (4:0)
-     function decorator() {}
-...
+./node_modules/.bin/jspm bundle-sfx src/app.js dist/build.js
+node dist/build.js
 ```
 
-Need to allow babel transpile decorator syntax
+## Lets create a ReactJS + mobx application
+
+First, update `index.html` to create DOM `<div>` where web application
+component will mount:
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jspm_packages/system.js"></script>
+    <script src="jspm.config.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+         System.import('./src/app.js').then(function (x) {
+           console.log('ran at ', new Date())
+         })
+    </script>
+  </body>
+</html>
+```
+
+Then, change `src/app.js` to create a simple click counter:
+```
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {observable} from 'mobx'
+import {observer} from 'mobx-react'
+
+class State {
+  @observable todos = []
+  @observable text = 'Hello'
+
+  addTodo (task) {
+    this.todos.push({
+      task: task,
+      completed: false,
+      assigneee: null
+    })
+  }
+}
+
+@observer
+class MyComponent extends React.Component {
+
+  @observable count = 0
+
+  render = () => {
+    return (
+      <div onClick={this.handleClick}> - {this.count} - </div>
+    )
+  }
+
+  handleClick = () => {
+    this.count += 2
+  }
+}
+
+ReactDOM.render(<MyComponent />, document.getElementById('app'))
+```
+
+Run http server to see it working. Note that you can no longer run `build.js` with
+`node`, because browser is required by React.
+```
+./node_modules/.bin/http-server -c-1
+```

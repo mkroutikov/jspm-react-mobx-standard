@@ -1,16 +1,35 @@
-function decorator () { }
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {observable} from 'mobx'
+import {observer} from 'mobx-react'
 
-@decorator
-class X {
-  constructor() {
-    console.log('created instance of class X')
-  }
+class State {
+  @observable todos = []
+  @observable text = 'Hello'
 
-  get blah() {
-    return 'blah'
+  addTodo (task) {
+    this.todos.push({
+      task: task,
+      completed: false,
+      assigneee: null
+    })
   }
 }
 
-const x = new X()
+@observer
+class MyComponent extends React.Component {
 
-export default x
+  @observable count = 0
+
+  render = () => {
+    return (
+      <div onClick={this.handleClick}> - {this.count} - </div>
+    )
+  }
+
+  handleClick = () => {
+    this.count += 2
+  }
+}
+
+ReactDOM.render(<MyComponent />, document.getElementById('app'))
