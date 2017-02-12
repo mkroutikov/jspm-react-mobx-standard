@@ -1,12 +1,3 @@
-## Lets set up unit tests
-```
-npm install mocha chai sinon mobx mobx-react react react-dom enzyme react-addons-test-utils --save-dev
-npm install babel-preset-es2015 babel-preset-react babel-preset-stage-0 --save-dev
-npm install babel-plugin-transform-class-properties babel-plugin-transform-decorators-legacy --save-dev
-```
-
-Create file `run-tests.js`:
-```
 const babelRegister = require('babel-register')
 const Mocha = require('mocha')
 const glob = require('glob')
@@ -39,11 +30,3 @@ glob('tests/**/*.spec.js', function (err, files) {
     return process.exit(failures)
   })
 })
-```
-
-Now, running
-```
-node run-tests.js
-```
-
-Should give you some good output
