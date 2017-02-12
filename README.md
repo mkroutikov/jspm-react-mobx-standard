@@ -1,40 +1,51 @@
-## Time to add mobx and react
+## Hot-reloading of code into development server
 
+First, lets create `run-server.js` code:
 ```
-./node_modules/.bin/jspm install npm:mobx npm:react npm:mobx-react npm:react-dom
-```
+'use strict'
+const httpServer = require('http-server')
+const port = process.env.PORT || 8080
+const emitter = require('chokidar-socket-emitter')
 
-Now, change `src/app.js` to use `mobx`:
-```
-import {observable} from 'mobx'
-
-class X {
-  @observable someProperty = 0
-
-  constructor() {
-    console.log('created instance of class X')
+const server = httpServer.createServer({
+  root: '.',
+  cache: -1,
+  robots: true,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': 'true'
   }
+})
 
-  get blah() {
-    return 'blah'
-  }
-}
+emitter({app: server.server})
 
-const x = new X()
-
-export default x
+server.listen(port, () => {
+  console.log('Listening on port ', port)
+})
 ```
 
-Creating bundle with `jspm` should work:
+For this to work we need to add more dependencies to `node`:
 ```
-./node_modules/.bin/jspm bundle-sfx src/app.js dist/build.js
-node dist/build.js
+npm install chokidar-socket-emitter --save-dev
 ```
 
-## Lets create a ReactJS + mobx application
+Now you can start server by doing this:
+```
+node run-server.js
+```
+Every time some file is changed you will see a message:
+```
+File xxx emitter: change
+```
 
-First, update `index.html` to create DOM `<div>` where web application
-component will mount:
+Next step is to teach `index.html` to accept these events and reload modules.
+
+For that we need to install
+```
+./node_modules/.bin/jspm install github:capaj/systemjs-hot-reloader
+```
+
+and change `index.html`:
 ```
 <!DOCTYPE html>
 <html>
@@ -45,55 +56,14 @@ component will mount:
   <body>
     <div id="app"></div>
     <script>
-         System.import('./src/app.js').then(function (x) {
-           console.log('ran at ', new Date())
-         })
+    System.trace = true
+    System.import('capaj/systemjs-hot-reloader').then(function(HotReloader){
+      var hr = new HotReloader.default('http://localhost:8080')  // chokidar-socket-emitter port
+      System.import('src/app.js').then(function () {
+        console.log('ran at ', new Date())
+      })
+    })
     </script>
   </body>
 </html>
-```
-
-Then, change `src/app.js` to create a simple click counter:
-```
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {observable} from 'mobx'
-import {observer} from 'mobx-react'
-
-class State {
-  @observable todos = []
-  @observable text = 'Hello'
-
-  addTodo (task) {
-    this.todos.push({
-      task: task,
-      completed: false,
-      assigneee: null
-    })
-  }
-}
-
-@observer
-class MyComponent extends React.Component {
-
-  @observable count = 0
-
-  render = () => {
-    return (
-      <div onClick={this.handleClick}> - {this.count} - </div>
-    )
-  }
-
-  handleClick = () => {
-    this.count += 2
-  }
-}
-
-ReactDOM.render(<MyComponent />, document.getElementById('app'))
-```
-
-Run http server to see it working. Note that you can no longer run `build.js` with
-`node`, because browser is required by React.
-```
-./node_modules/.bin/http-server -c-1
 ```
