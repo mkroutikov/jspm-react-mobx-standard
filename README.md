@@ -16,9 +16,12 @@ To see the configuration steps, do this:
 ```
 git branch
 ```
-to see the available branches. Each branch is built on top of the previous and adds another feature and explanation in the `README.md`
+This will show the list of available branches. Each branch is built on top of the previous and adds another feature and explanation in the `README.md`.
+
+To research the process simply use GitHub [branch comparison tool](https://github.com/mkroutikov/jspm-react-mobx-standard/compare/step7...step8?expand=1).
 
 To use as a pre-built boilerplate:
 ```
-
+git clone https://github.com/mkroutikov/jspm-react-mobx-standard.git
+git checkout step8
 ```
