@@ -35,3 +35,11 @@ git branch -D step8
 # assign new remote repository
 git remote set-url origin https://github.com/me-at-github/my-cool-name.git
 ```
+
+In the final boilerplate, lifecycle is invoked as a `make` command:
+```
+make install    # to (re)install node and jspm packages
+make test       # runs unit tests
+make start      # starts hot-reloading development server
+make            # builds distributable
+```
