@@ -20,6 +20,7 @@ class State {
 class MyComponent extends React.Component {
 
   @observable count = 0
+  @observable state = new State()
 
   render = () => {
     return (
