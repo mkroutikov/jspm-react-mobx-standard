@@ -22,6 +22,16 @@ To research the process simply use GitHub [branch comparison tool](https://githu
 
 To use as a pre-built boilerplate:
 ```
-git clone https://github.com/mkroutikov/jspm-react-mobx-standard.git
-git checkout step8
+# clone the branch step8 only
+git clone -b step8 --single-branch https://github.com/mkroutikov/jspm-react-mobx-standard.git
+# rename repository as appropriate
+mv jspm-react-mobx-standard my-cool-name
+cd my-cool-name
+# create and checkout master branch
+git branch master
+git checkout master
+# delete step8 branch
+git branch -D step8
+# assign new remote repository
+git remote set-url origin https://github.com/me-at-github/my-cool-name.git
 ```
