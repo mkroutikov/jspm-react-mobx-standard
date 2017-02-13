@@ -19,3 +19,8 @@ dist:
 
 clean:
 	rm -rf dist
+
+install:
+	rm -rf node_modules jspm_packages
+	npm install
+	./node_modules/.bin/jspm install
